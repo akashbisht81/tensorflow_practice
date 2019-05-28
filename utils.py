@@ -38,14 +38,14 @@ def read_birth_life_data(filename):
     data = np.asarray(data, dtype=np.float32)
     return data, n_samples
 
-def download_one_file(download_url, 
-                    local_dest, 
-                    expected_byte=None, 
+def download_one_file(download_url,
+                    local_dest,
+                    expected_byte=None,
                     unzip_and_remove=False):
-    """ 
+    """
     Download the file from download_url into local_dest
     if the file doesn't already exists.
-    If expected_byte is provided, check if 
+    If expected_byte is provided, check if
     the downloaded file has the same number of bytes.
     If unzip_and_remove is True, unzip the file and remove the zip file
     """
@@ -66,12 +66,12 @@ def download_one_file(download_url,
                 print('The downloaded file has unexpected number of bytes')
 
 def download_mnist(path):
-    """ 
-    Download and unzip the dataset mnist if it's not already downloaded 
+    """
+    Download and unzip the dataset mnist if it's not already downloaded
     Download from http://yann.lecun.com/exdb/mnist
     """
     safe_mkdir(path)
-    url = 'http://yann.lecun.com/exdb/mnist'
+    url = 'http://yann.lecun.com/exdb/mnist/'
     filenames = ['train-images-idx3-ubyte.gz',
                 'train-labels-idx1-ubyte.gz',
                 't10k-images-idx3-ubyte.gz',
@@ -79,7 +79,7 @@ def download_mnist(path):
     expected_bytes = [9912422, 28881, 1648877, 4542]
 
     for filename, byte in zip(filenames, expected_bytes):
-        download_url = os.path.join(url, filename)
+        download_url = os.path.join(url, filename).replace('\\','/')
         local_dest = os.path.join(path, filename)
         download_one_file(download_url, local_dest, byte, True)
 
@@ -93,7 +93,7 @@ def parse_data(path, dataset, flatten):
         labels = np.fromfile(file, dtype=np.int8) #int8
         new_labels = np.zeros((num, 10))
         new_labels[np.arange(num), labels] = 1
-    
+
     img_file = os.path.join(path, dataset + '-images-idx3-ubyte')
     with open(img_file, 'rb') as file:
         _, num, rows, cols = struct.unpack(">IIII", file.read(16))
@@ -133,7 +133,7 @@ def get_mnist_dataset(batch_size):
     test_data = test_data.batch(batch_size)
 
     return train_data, test_data
-    
+
 def show(image):
     """
     Render a given numpy.uint8 2D array of pixel data.
