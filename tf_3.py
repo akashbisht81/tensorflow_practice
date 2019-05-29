@@ -7,7 +7,7 @@ import tensorflow as tf
 import time
 
 import utils
-
+from tensorflow.examples.tutorials.mnist import input_data
 # Define paramaters for the model
 learning_rate = 0.01
 batch_size = 128
